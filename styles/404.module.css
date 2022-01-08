@@ -1,0 +1,21 @@
+.btn {
+  padding: 1rem 2rem;
+  border-radius: 0.25rem;
+  border: none;
+  background-color: #464646;
+  text-align: center;
+}
+
+.btn-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.page-container {
+  display: grid;
+  place-content: center;
+  height: 100%;
+  background-color: rgb(15, 15, 19);
+}
