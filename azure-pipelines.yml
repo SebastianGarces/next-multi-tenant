@@ -1,0 +1,37 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Azure subscription 1 (368be9e6-f70d-45a9-8ba1-7f74c26773d4)'
+    appType: 'webAppContainer'
+    WebAppName: 'testdeploynextjs'
+    DockerNamespace: 'nextjstest@azurecr.io'
+    DockerRepository: 'nextjstest'
+- task: DockerCompose@0
+  inputs:
+    containerregistrytype: 'Azure Container Registry'
+    azureSubscription: 'Azure subscription 1 (368be9e6-f70d-45a9-8ba1-7f74c26773d4)'
+    azureContainerRegistry: '{"loginServer":"nextjstest.azurecr.io", "id" : "/subscriptions/368be9e6-f70d-45a9-8ba1-7f74c26773d4/resourceGroups/nextjs-test/providers/Microsoft.ContainerRegistry/registries/nextjstest"}'
+    dockerComposeFile: '**/docker-compose.yml'
+    action: 'Build services'
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run build
+  displayName: 'npm install and build'
